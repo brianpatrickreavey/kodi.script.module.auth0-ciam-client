@@ -46,6 +46,9 @@ jobs:
         rm -rf script.module.auth0-ciam-client/resources/lib/auth0_ciam_client
         ls -la
         ls -la script.module.auth0-ciam-client/
+        ls -la script.module.auth0-ciam-client/resources/
+        ls -la script.module.auth0-ciam-client/resources/lib/
+        ls script.module.auth0-ciam-client/resources/lib/README.md
         cp -r temp_auth0_ciam_client/auth0_ciam_client script.module.auth0-ciam-client/resources/lib/
         rm -rf temp_auth0_ciam_client
 
