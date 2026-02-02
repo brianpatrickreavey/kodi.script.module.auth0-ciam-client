@@ -39,7 +39,7 @@ jobs:
       with:
         repository: brianpatrickreavey/auth0-ciam-client
         path: temp_auth0_ciam_client
-        ref: ${{ github.event_name == 'workflow_call' && inputs.lib_tag || 'main' }}
+        ref: ${{ github.event_name == 'workflow_call' && inputs.lib_tag || 'master' }}
 
     - name: Copy auth0_ciam_client to addon
       run: |
