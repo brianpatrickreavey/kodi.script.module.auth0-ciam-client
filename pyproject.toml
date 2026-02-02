@@ -1,3 +1,10 @@
+[project]
+name = "script.module.auth0-ciam-client"
+version = "0.1.0"
+description = "Kodi script module for Auth0 CIAM Client"
+readme = "README.md"
+requires-python = ">=3.9"
+
 [dependency-groups]
 dev = [
     "kodi-addon-checker",

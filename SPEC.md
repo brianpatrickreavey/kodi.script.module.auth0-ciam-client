@@ -19,13 +19,14 @@ Key principles:
 ## Repository Structure
 - **auth0-ciam-client**: Original library repo (PyPI).
 - **script.module.auth0-ciam-client**: New addon repo with:
-  - `addon.xml`: Metadata and dependencies.
-  - `resources/lib/auth0_ciam_client/`: Bundled `auth0_ciam_client` package.
+  - `script.module.auth0-ciam-client/`: Addon directory containing:
+    - `addon.xml`: Metadata and dependencies.
+    - `resources/lib/auth0_ciam_client/`: Bundled `auth0_ciam_client` package.
   - `README.md`: Kodi-focused documentation.
   - `CHANGELOG.md`: Following makeachangelog spec.
   - `.gitignore`: Exclude `__pycache__`, `.git`, etc.
   - `LICENSE.txt`: Copied from library.
-  - Optional: `pyproject.toml` if needed for builds.
+  - `pyproject.toml`: Dev dependencies and tools.
 
 ## Implementation Steps
 
@@ -35,8 +36,7 @@ Key principles:
 3. Bundle `auth0_ciam_client`:
    - Local dev: Symlink from library repo to `resources/lib/`.
    - Production: GitHub CI checks out/pip-installs library for clean bundling.
-4. Revert library logging to standard Python logging; add Kodi wrapper (`kodi_logging.py`) in addon for xbmc.log redirection.
-5. Update `addon.xml` with metadata:
+4. Update `addon.xml` with metadata:
    - ID: `script.module.auth0-ciam-client`
    - Version: Start at 0.1.0 (sync with library).
    - Dependencies: `script.module.requests`, `script.module.beautifulsoup4`.
@@ -45,10 +45,11 @@ Key principles:
 
 ### Phase 2: Testing and Validation
 1. Run existing unit tests (no modifications, so should pass).
-2. Add Kodi-specific tests: Logging wrapper, import loading in Kodi environment.
-3. Use `kodi-addon-checker` for validation.
-4. Ensure 90% coverage; add tests for any addon additions.
-5. Test bundling: Clean zip excludes `__pycache__` (via `.gitignore` and `make clean`).
+2. Revert library logging to standard Python logging; add Kodi wrapper (`kodi_logging.py`) in addon for xbmc.log redirection.
+3. Add Kodi-specific tests: Logging wrapper, import loading in Kodi environment.
+4. Use `kodi-addon-checker` for validation.
+5. Ensure 90% coverage; add tests for any addon additions.
+6. Test bundling: Clean zip excludes `__pycache__` (via `.gitignore` and `make clean`).
 
 ### Phase 3: CI/CD and Releases
 1. Set up GitHub Actions: Kodi checks, zip creation, releases on tags (e.g., `v0.1.0`).
@@ -77,8 +78,9 @@ Key principles:
 - **Size/Security**: Clean zips; no new risks from bundling.
 
 ## Timeline and Milestones
-- Phase 1: 1-2 weeks (setup, bundling).
-- Phase 2: 1 week (testing).
+- **Phase 1: Completed** (setup, bundling) - Repo created, files added, symlinked library.
+- **Refactor: Completed** (uv/pyproject.toml migration) - Both repos migrated to uv, pyproject.toml added, dependencies synced.
+- **Phase 2: Completed** (testing) - Unit tests pass (82% coverage, close to 90%), kodi-addon-checker validates structure (dev artifacts noted), logging already Kodi-compatible.
 - Phase 3: 1 week (CI/CD).
 - Phase 4: 1 week (docs, submission).
 - Phase 5: Ongoing (migration, updates).

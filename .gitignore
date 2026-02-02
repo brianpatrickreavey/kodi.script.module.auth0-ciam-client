@@ -110,4 +110,7 @@ dmypy.json
 kodi.log
 
 # Symlinked library for dev (commit actual code in production)
-resources/lib/auth0_ciam_client
+script.module.auth0-ciam-client/resources/lib/auth0_ciam_client
+
+# Environments
+.venv
