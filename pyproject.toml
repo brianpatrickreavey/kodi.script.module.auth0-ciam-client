@@ -10,6 +10,9 @@ dev = [
     "kodi-addon-checker",
     "pytest",
     "pytest-cov",
+    "pre-commit",
+    "black",
+    "flake8",
 ]
 
 [tool.black]
