@@ -1,0 +1,29 @@
+name: Release Addon
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+    with:
+      lib_tag: ${{ github.ref_name }}
+  release:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create ZIP
+        run: git archive --format=zip --output script.module.auth0-ciam-client-${{ github.ref_name }}.zip HEAD script.module.auth0-ciam-client
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: script.module.auth0-ciam-client-${{ github.ref_name }}.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
