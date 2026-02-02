@@ -44,7 +44,7 @@ jobs:
     - name: Copy auth0_ciam_client to addon
       run: |
         rm -rf script.module.auth0-ciam-client/resources/lib/auth0_ciam_client
-        find . | head -50
+        ls -la
         cp -r temp_auth0_ciam_client/auth0_ciam_client script.module.auth0-ciam-client/resources/lib/
         rm -rf temp_auth0_ciam_client
 
