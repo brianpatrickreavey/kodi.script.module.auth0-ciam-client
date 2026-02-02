@@ -1,0 +1,24 @@
+[dependency-groups]
+dev = [
+    "kodi-addon-checker",
+    "pytest",
+    "pytest-cov",
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py39']
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = ["tests"]  # If added later
+
+[tool.coverage.run]
+source = ["resources"]
+omit = ["*/tests/*", "*/test_*.py"]
+
+[tool.flake8]
+max-line-length = 100
+extend-ignore = ["E203", "W503"]
+exclude = [".git", "__pycache__", "build", "dist"]
