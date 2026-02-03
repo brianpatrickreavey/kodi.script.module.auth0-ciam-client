@@ -12,7 +12,7 @@ on:
         type: string
 
 env:
-  KODI_BRANCHES: '["nexus"]'
+  KODI_BRANCHES: '["matrix", "nexus", "omega"]'
 
 jobs:
   setup:
@@ -78,4 +78,4 @@ jobs:
     - name: Validate addon
       run: |
         echo "Validating for Kodi branch: ${{ matrix.kodi-branch }}"
-        uv run kodi-addon-checker --branch ${{ matrix.kodi-branch }} script.module.auth0-ciam-client
+        make validate
