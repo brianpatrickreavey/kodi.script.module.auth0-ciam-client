@@ -7,6 +7,7 @@ requires-python = ">=3.9"
 
 [dependency-groups]
 dev = [
+    "kodi-addon-builder @ git+https://github.com/brianpatrickreavey/kodi-addon-builder.git@v0.3.7",
     "kodi-addon-checker",
     "pytest",
     "pytest-cov",
