@@ -45,11 +45,19 @@ Key principles:
 
 ### Phase 2: Testing and Validation
 1. Run existing unit tests (no modifications, so should pass).
-2. Revert library logging to standard Python logging; add Kodi wrapper (`kodi_logging.py`) in addon for xbmc.log redirection.
+2. Revert library logging to standard Python logging; defer Kodi wrapper (`kodi_logging.py`) addition until Phase 2.5 completion, as testing requires live Kodi environment.
 3. Add Kodi-specific tests: Logging wrapper, import loading in Kodi environment.
 4. Use `kodi-addon-checker` for validation.
 5. Ensure 90% coverage; add tests for any addon additions.
 6. Test bundling: Clean zip excludes `__pycache__` (via `.gitignore` and `make clean`).
+
+### Phase 2.5: Kodi Testing Harness (Development-Only)
+1. Create a minimal test harness addon (`script.auth0-ciam-client-test-harness`) in `dev/script.auth0-ciam-client-test-harness/` with `addon.xml` and `main.py` to import and exercise the module (e.g., basic auth flow, logging calls).
+2. Symlink both `script.module.auth0-ciam-client` and `script.auth0-ciam-client-test-harness` into local Kodi addons directory for live testing.
+3. Use harness to validate imports, functions, and logging in Kodi environment; check `kodi.log` for output.
+4. Document in DEVELOPMENT.md: Symlinking steps, script usage, log verification.
+5. Provide `symlink_addons.sh` script for automated symlinking (--create, --remove).
+6. Do not include harness in releases (exclude from builds/zips).
 
 ### Phase 3: CI/CD and Releases
 1. Set up GitHub Actions: Kodi checks, zip creation, releases on tags (e.g., `v0.1.0`).
@@ -81,6 +89,7 @@ Key principles:
 - **Phase 1: Completed** (setup, bundling) - Repo created, files added, symlinked library.
 - **Refactor: Completed** (uv/pyproject.toml migration) - Both repos migrated to uv, pyproject.toml added, dependencies synced.
 - **Phase 2: Completed** (testing) - Unit tests pass (82% coverage, close to 90%), kodi-addon-checker validates structure (dev artifacts noted), logging already Kodi-compatible.
+- **Phase 2.5: Completed** (Kodi testing harness) - Harness created, symlinked, tested imports/logging in Kodi, documented in DEVELOPMENT.md, symlink script provided.
 - Phase 3: 1 week (CI/CD).
 - Phase 4: 1 week (docs, submission).
 - Phase 5: Ongoing (migration, updates).

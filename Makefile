@@ -9,6 +9,13 @@ help:
 	@echo "  clean-addon - Clean addon directory of Python artifacts"
 	@echo "  help        - Show this help message"
 
+# Cleanup
+clean:
+	rm -rf dist/ build/ *.egg-info/
+	rm -rf .pytest_cache/ .coverage htmlcov/
+	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	find . -type f -name "*.pyc" -delete 2>/dev/null || true
+
 # Clean addon directory
 clean-addon:
 	find script.module.auth0-ciam-client -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true

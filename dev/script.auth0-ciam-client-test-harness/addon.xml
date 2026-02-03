@@ -1,0 +1,13 @@
+<addon id="script.auth0-ciam-client-test-harness" version="0.0.1" name="Auth0 CIAM Client Test Harness">
+  <requires>
+    <import addon="script.module.auth0-ciam-client"/>
+    <import addon="xbmc.python" version="3.0.1"/>
+  </requires>
+  <extension point="xbmc.python.script" library="main.py"/>
+  <extension point="xbmc.addon.metadata">
+    <summary>Test harness for script.module.auth0-ciam-client</summary>
+    <description>Development-only script to test imports and logging in Kodi environment.</description>
+    <license>GPL-3.0-only</license>
+    <platform>all</platform>
+  </extension>
+</addon>
