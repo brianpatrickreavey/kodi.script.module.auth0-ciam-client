@@ -27,3 +27,12 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Dispatch to Central Repo
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CENTRAL_PAT }}
+          repository: brianpatrickreavey/repository.kodi.reavey05.com
+          event-type: addon-release
+          client-payload: '{"addon": "script.module.auth0-ciam-client", "tag": "${{ github.ref_name }}"}'
