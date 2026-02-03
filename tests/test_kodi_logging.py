@@ -65,6 +65,7 @@ class TestKodiLogHandler:
     @patch("xbmc.log")
     def test_emit_critical(self, mock_xbmc_log):
         handler = KodiLogHandler()
+        handler.setFormatter(logging.Formatter("%(name)s: %(message)s"))
         record = Mock()
         record.levelno = logging.CRITICAL
         record.getMessage = Mock(return_value="critical message")
@@ -73,7 +74,7 @@ class TestKodiLogHandler:
         record.stack_info = None
         record.name = "test"
         handler.emit(record)
-        mock_xbmc_log.assert_called_once_with("test: critical message", 4)  # xbmc.LOGFATAL
+        mock_xbmc_log.assert_called_once_with("test: critical message", xbmc.LOGFATAL)
 
 
 class TestSetup:
