@@ -45,7 +45,7 @@ Key principles:
 
 ### Phase 2: Testing and Validation
 1. Run existing unit tests (no modifications, so should pass).
-2. Revert library logging to standard Python logging; defer Kodi wrapper (`kodi_logging.py`) addition until Phase 2.5 completion, as testing requires live Kodi environment.
+2. Revert library logging to standard Python logging; add Kodi wrapper (`kodi_logging.py`) in addon for xbmc.log redirection.
 3. Add Kodi-specific tests: Logging wrapper, import loading in Kodi environment.
 4. Use `kodi-addon-checker` for validation.
 5. Ensure 90% coverage; add tests for any addon additions.
