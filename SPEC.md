@@ -67,7 +67,7 @@ Key principles:
 ### Phase 4: Documentation and Submission
 1. README: Kodi installation (via repo), developer usage examples (e.g., imports), dependencies.
 2. Follow script.module.requests patterns: Minimal, focused on Kodi.
-3. Submit to Kodi repo: Include changelog, license.
+3. Defer official Kodi submission; self-host addon repository for distribution.
 4. No i18n initially (English-only, like requests); add placeholders if needed later.
 
 ### Phase 5: Migration and Future
@@ -91,12 +91,11 @@ Key principles:
 - **Phase 2: Completed** (testing) - Unit tests pass (82% coverage, close to 90%), kodi-addon-checker validates structure (dev artifacts noted), logging already Kodi-compatible.
 - **Phase 2.5: Completed** (Kodi testing harness) - Harness created, symlinked, tested imports/logging in Kodi, documented in DEVELOPMENT.md, symlink script provided.
 - Phase 3: 1 week (CI/CD).
-- Phase 4: 1 week (docs, submission).
+- **Phase 4: Completed** (docs, self-hosting setup) - README updated for self-hosting, release dispatch handles external hosting.
 - Phase 5: Ongoing (migration, updates).
 
 ## Open Items
-- Research Kodi submission process for exact requirements.
-- Confirm addon.xml details with Kodi team if needed.
+- Confirm addon.xml details with Kodi community if needed.
 - Test in actual Kodi environment for import/loading.
 
 ## References
