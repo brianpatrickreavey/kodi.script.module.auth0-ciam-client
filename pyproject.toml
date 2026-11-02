@@ -1,9 +1,12 @@
 [project]
 name = "script.module.auth0-ciam-client"
-version = "0.0.1"
+version = "0.0.5"
 description = "Kodi script module for Auth0 CIAM Client"
 readme = "README.md"
 requires-python = ">=3.9"
+dependencies = [
+    "auth0-ciam-client @ git+https://github.com/brianpatrickreavey/auth0-ciam-client.git@v0.2.2",
+]
 
 [dependency-groups]
 dev = [

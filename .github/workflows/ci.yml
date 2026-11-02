@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [ main, master ]
   workflow_call:
-    inputs:
-      lib_tag:
-        required: true
-        type: string
 
 env:
   KODI_BRANCHES: '["matrix", "nexus", "omega"]'
@@ -34,12 +30,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Read pinned library tag
+      id: pin
+      run: echo "tag=$(python3 tools/library_tag.py)" >> "$GITHUB_OUTPUT"
+
     - name: Checkout auth0_ciam_client library
       uses: actions/checkout@v4
       with:
         repository: brianpatrickreavey/auth0-ciam-client
         path: temp_auth0_ciam_client
-        ref: ${{ github.event_name == 'workflow_call' && inputs.lib_tag || 'master' }}
+        ref: ${{ steps.pin.outputs.tag }}
 
     - name: Copy auth0_ciam_client to addon
       run: |
