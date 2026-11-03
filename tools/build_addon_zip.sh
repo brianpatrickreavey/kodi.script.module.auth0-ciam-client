@@ -21,8 +21,6 @@ rm -f "$out"
   cd "$root"
   zip -r "$out" script.module.auth0-ciam-client -x '*__pycache__*'
 )
-if ! unzip -l "$out" | grep -F 'script.module.auth0-ciam-client/resources/lib/auth0_ciam_client/__init__.py'; then
-  echo "Zip is missing auth0_ciam_client/__init__.py" >&2
-  exit 1
-fi
+python3 "$root/tools/check_addon_zip.py" "$out" script.module.auth0-ciam-client "${version#v}" \
+  resources/lib/auth0_ciam_client/__init__.py
 echo "Built $out"

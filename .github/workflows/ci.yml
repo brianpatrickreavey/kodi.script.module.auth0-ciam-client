@@ -77,3 +77,26 @@ jobs:
 
       - name: Validate addon
         run: make validate BRANCH=${{ matrix.kodi-branch }}
+
+  zip:
+    name: zip installs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Read pinned library tag
+        id: pin
+        run: echo "tag=$(python3 tools/library_tag.py)" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout auth0-ciam-client
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: brianpatrickreavey/auth0-ciam-client
+          ref: ${{ steps.pin.outputs.tag }}
+          path: auth0-ciam-client-src
+
+      - name: Check the release zip unpacks as one addon
+        run: |
+          version=$(python3 -c 'import xml.etree.ElementTree as ET; print(ET.parse("script.module.auth0-ciam-client/addon.xml").getroot().get("version"))')
+          bash tools/build_addon_zip.sh auth0-ciam-client-src "v${version}"
