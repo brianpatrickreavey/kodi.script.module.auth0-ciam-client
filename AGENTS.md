@@ -10,6 +10,8 @@ cd kodi.script.module.auth0-ciam-client
 uv sync
 ```
 
-Treat questions as read-only. `.github/copilot-instructions.md` still has the Angel Studios plugin header; prefer this file.
+Exploration is the default. Answer questions and design options in text. Change files when the user asks for a change or a result. A "?" does not cancel a request, and a missing "?" does not turn a speculative idea into a task. Prefer this file over `.github/copilot-instructions.md`. See `~/.grok/rules/explore-before-implement.md`.
+
+Ship steps are in `~/Code/kodi-development/README.md`.
 
 Distributed via the self-hosted repo `repository.kodi.reavey05.com`, not the official Kodi repo.
