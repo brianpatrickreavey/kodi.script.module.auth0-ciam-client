@@ -1,4 +1,4 @@
-name: CI Validate
+name: CI Test and Validate
 
 on:
   push:
@@ -7,75 +7,73 @@ on:
     branches: [ main, master ]
   workflow_call:
 
-env:
-  KODI_BRANCHES: '["matrix", "nexus", "omega"]'
+# pytest mocks xbmc. It does not start Kodi.
+# validate runs kodi-addon-checker. That checks addon.xml and dependency
+# rules for the named Kodi branch. It does not start Kodi either.
+# The branch in the job name is the --branch value.
 
 jobs:
-  setup:
+  test:
+    name: pytest
     runs-on: ubuntu-latest
-    outputs:
-      validate_matrix: ${{ steps.config.outputs.validate_matrix }}
     steps:
-      - id: config
-        run: |
-          echo "validate_matrix={\"kodi-branch\":${KODI_BRANCHES}}" >> $GITHUB_OUTPUT
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3.2.4
+        with:
+          version: "0.13.6"
+
+      - name: Set up Python
+        run: uv python install 3.9
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Run pytest
+        run: uv run make test
 
   validate:
-    needs: setup
+    name: validate (${{ matrix.kodi-branch }})
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.setup.outputs.validate_matrix) }}
-
+      matrix:
+        kodi-branch: [matrix, nexus, omega]
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-    - name: Read pinned library tag
-      id: pin
-      run: echo "tag=$(python3 tools/library_tag.py)" >> "$GITHUB_OUTPUT"
+      - name: Read pinned library tag
+        id: pin
+        run: echo "tag=$(python3 tools/library_tag.py)" >> "$GITHUB_OUTPUT"
 
-    - name: Checkout auth0_ciam_client library
-      uses: actions/checkout@v4
-      with:
-        repository: brianpatrickreavey/auth0-ciam-client
-        path: temp_auth0_ciam_client
-        ref: ${{ steps.pin.outputs.tag }}
+      - name: Checkout auth0_ciam_client library
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: brianpatrickreavey/auth0-ciam-client
+          path: temp_auth0_ciam_client
+          ref: ${{ steps.pin.outputs.tag }}
 
-    - name: Copy auth0_ciam_client to addon
-      run: |
-        rm -rf script.module.auth0-ciam-client/resources/lib/auth0_ciam_client
-        ls -la
-        ls -la script.module.auth0-ciam-client/
-        ls -la script.module.auth0-ciam-client/resources/
-        ls -la script.module.auth0-ciam-client/resources/lib/
-        ls script.module.auth0-ciam-client/resources/lib/README.md
-        cp -r temp_auth0_ciam_client/auth0_ciam_client script.module.auth0-ciam-client/resources/lib/
-        rm -rf temp_auth0_ciam_client
+      - name: Copy auth0_ciam_client to addon
+        run: |
+          rm -rf script.module.auth0-ciam-client/resources/lib/auth0_ciam_client
+          cp -r temp_auth0_ciam_client/auth0_ciam_client script.module.auth0-ciam-client/resources/lib/
+          rm -rf temp_auth0_ciam_client
 
-    - name: Set up uv
-      uses: astral-sh/setup-uv@v3
-      with:
-        version: "latest"
+      - name: Set up uv
+        uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3.2.4
+        with:
+          version: "0.13.6"
 
-    - name: Set up Python
-      run: uv python install 3.9
+      - name: Set up Python
+        run: uv python install 3.9
 
-    - name: Install dependencies
-      run: uv sync --group dev
+      - name: Install dependencies
+        run: uv sync --group dev
 
-    - name: Clean addon
-      run: make clean-addon
+      - name: Clean addon
+        run: make clean-addon
 
-    - name: Validate Environment
-      run: |
-        uname -a
-        cat /etc/os-release
-        whoami
-        pwd
-        python --version || true
-        node --version || true
-        git --version || true
-    - name: Validate addon
-      run: |
-        echo "Validating for Kodi branch: ${{ matrix.kodi-branch }}"
-        make validate
+      - name: Validate addon
+        run: make validate BRANCH=${{ matrix.kodi-branch }}
