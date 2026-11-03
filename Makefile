@@ -1,7 +1,7 @@
 # Makefile for kodi.script.module.auth0-ciam-client addon development
 SHELL := /bin/bash
 
-.PHONY: clean-addon help install test unittest-with-coverage reinstall-kodi-checker validate
+.PHONY: clean-addon help install test unittest-with-coverage validate
 
 # Default target
 help:
@@ -9,7 +9,6 @@ help:
 	@echo "  install                - Set up the development environment (create .venv and install dependencies)"
 	@echo "  test                   - Run unit tests"
 	@echo "  unittest-with-coverage - Run unit tests with coverage report"
-	@echo "  reinstall-kodi-checker - Reinstall kodi-addon-checker package"
 	@echo "  validate               - Run kodi-addon-checker. BRANCH defaults to matrix. Example: make validate BRANCH=nexus"
 	@echo "  clean-addon            - Clean addon directory of Python artifacts"
 	@echo "  help                   - Show this help message"
@@ -25,19 +24,11 @@ test:
 unittest-with-coverage:
 	uv run pytest --cov=resources --cov-report=term-missing tests/
 
-reinstall-kodi-checker:
-	uv cache clean && uv sync --reinstall-package kodi-addon-checker
-
 # BRANCH is a kodi-addon-checker version name: matrix, nexus, omega, or piers.
 BRANCH ?= matrix
 
 validate:
-	@echo "kodi-addon-checker --branch $(BRANCH)"
-	KODI_CHECKER_DIR=$$(find .venv -name kodi_addon_checker -type d | head -1); \
-	cp kodi_addon_checker/check_addon.py $$KODI_CHECKER_DIR/; \
-	cp kodi_addon_checker/__main__.py $$KODI_CHECKER_DIR/; \
-	cp kodi_addon_checker/addons/Repository.py $$KODI_CHECKER_DIR/addons/; \
-	uv run kodi-addon-checker --addon-repo-domain mirror.umd.edu --branch $(BRANCH) --enable-debug-log --reporter console --reporter log script.module.auth0-ciam-client/
+	uv run kodi-addon-checker --branch $(BRANCH) script.module.auth0-ciam-client/
 
 # Cleanup
 clean:
